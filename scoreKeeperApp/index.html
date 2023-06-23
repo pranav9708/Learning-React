@@ -13,21 +13,18 @@
     <script type="text/babel">
         let score =0;
         let wicket =0;
-        let ballsArray = [];
+        let ballwiseResult = [];
+        let hit;
+        let inputRef=React.createRef();
         const updateScore = (value)=>{
-            if(wicket<10){
-                ballsArray.push(value);
-                score+=value;
-                rootElement.render(<App />);
-            }
+            hit=value;
+            rootElement.render(<App />);
         }
         const updateWicket=()=>{
-            if(wicket<10){
-                ballsArray.push("W");
-                wicket+=1;
-                rootElement.render(<App />);
-            }
+            hit="W";
+            rootElement.render(<App />);
         }
+
         const BallScore=()=>{
             return(
                 <div>
@@ -42,6 +39,31 @@
                 </div>
             )
         }
+
+        function handleSubmit(e){
+            e.preventDefault();
+
+            ballwiseResult.unshift(
+                <span>{`${hit} , ${inputRef.current.value}`}</span>
+            );
+            if(hit!=="W"){
+                score+=hit;
+            }else{
+                wicket+=1;
+            }
+            hit=0;
+            inputRef.current.value="";
+            rootElement.render(<App />);
+        }
+
+        const Form=()=>(
+            <form onSubmit={handleSubmit}>
+                <input value={hit}/>
+                <input ref = {inputRef} placeholder="Add a comment"/>
+                <button>Submit</button>
+            </form>
+        )
+
         const App=()=>{
             return (
                 <>
@@ -55,7 +77,12 @@
                 <button onClick={()=>updateScore(5)}>5</button>
                 <button onClick={()=>updateScore(6)}>6</button>
                 <button onClick={updateWicket}>Wicket</button>
-                <BallScore/>
+                <Form/>
+                <br/>
+                <hr/>
+                {ballwiseResult.map((res,index)=>(
+                    <p key={index}>{res}</p>
+                ))}
                 </>
             )
         }

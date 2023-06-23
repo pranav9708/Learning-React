@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <title>React App</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+    	let namesref=React.createRef();
+        let marksref=React.createRef();
+        let studentDetails=[];
+
+      function handleSubmit(e){
+      	e.preventDefault();
+        
+        studentDetails.push({name:namesref.current.value,mark:marksref.current.value});
+        console.log(studentDetails);
+        namesref.current.value="";
+        marksref.current.value="";
+        rootElement.render(<App />); 
+      }
+      const Form = () => 
+        <>
+      	<form onSubmit={handleSubmit}>
+            <input ref= {namesref} placeholder="Name"/>
+            <input ref= {marksref} placeholder="Marks" type="number"/>
+            <button>Submit</button>
+    	</form>
+        </>;
+
+      const Result = () =>
+        <>
+        <p>
+        </p>
+      	<table border="1">
+        	<thead>
+                <tr>
+                    <th>Student's name</th>
+                    <th>Marks</th>
+                </tr>
+        	</thead>
+        	<tbody>
+                {studentDetails.map((student,index)=>(
+                    <tr key={index}>
+                        <td>{student.name}</td>
+                        <td>{student.mark}</td>
+                    </tr>
+                ))}
+        	</tbody>
+        </table>
+        </>;
+
+      const App = () => (
+        <>
+        	<h1>Students' form</h1>
+          <Form />
+          <Result />
+        </>
+      );
+
+      const rootElement = ReactDOM.createRoot(document.getElementById("root"));
+      rootElement.render(<App />);
+    </script>
+  </body>
+</html>
